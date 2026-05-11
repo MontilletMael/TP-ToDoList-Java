@@ -126,7 +126,13 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskResponse updateStatus(Long id, TaskStatusRequest request) {
-        return null;
+        Task task = taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task not found"));
+        if (request.getDone() != null) {
+            task.setDone(request.getDone());
+        }
+        Task savedTask = taskRepository.save(task);
+
+        return TaskResponse.fromEntity(savedTask);
     }
 
 }
