@@ -5,6 +5,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import java.util.Date;
 
@@ -26,12 +30,18 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Size(max=10)
+    @NotBlank(message = "Le titre est obligatoire")
     private String title;
 
+    @Size(max = 100)
     private String description;
 
+    @NotNull(message = "Le statut est obligatoire")
     private boolean done;
 
+    @NotBlank(message = "La priorité est obligatoire")
+    @Pattern(regexp = "LOW|MEDIUM|HIGH")
     private String priority;
 
     private Date created;

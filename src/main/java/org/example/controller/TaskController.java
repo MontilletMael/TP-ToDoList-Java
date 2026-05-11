@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import jakarta.validation.Valid;
 import org.example.dto.TaskCreate;
 import org.example.dto.TaskResponse;
 import org.example.dto.TaskStatusRequest;
@@ -48,7 +49,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<TaskResponse> create(@RequestBody TaskCreate request) {
+    public ResponseEntity<TaskResponse> create(@Valid @RequestBody TaskCreate request) {
         // TODO eleves :
         // 1. remplacer Object par un vrai DTO d'entree
         // 2. appeler le service
@@ -59,7 +60,7 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaskResponse> update(@PathVariable("id") Long id, @RequestBody TaskUpdate request) {
+    public ResponseEntity<TaskResponse> update(@Valid @PathVariable("id") Long id, @RequestBody TaskUpdate request) {
         // TODO eleves :
         // 1. remplacer Object par un vrai DTO d'entree
         // 2. appeler le service
@@ -85,7 +86,7 @@ public class TaskController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<TaskResponse> updateStatus(@PathVariable("id") Long id, @RequestBody TaskStatusRequest request) {
+    public ResponseEntity<TaskResponse> updateStatus(@Valid @PathVariable("id") Long id, @RequestBody TaskStatusRequest request) {
         TaskResponse task = taskService.findById(id);
         if (task == null) {
             return ResponseEntity.notFound().build();
