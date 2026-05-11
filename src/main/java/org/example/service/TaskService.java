@@ -24,5 +24,5 @@ public interface TaskService {
 
     void delete(Long id);
 
-    TaskResponse updateStatus(Long id, TaskStatusRequest request);
+    TaskResponse taskIsDone(Long id);
 }

@@ -125,8 +125,18 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskResponse updateStatus(Long id, TaskStatusRequest request) {
-        return null;
+    public TaskResponse taskIsDone(Long id){
+        Task task = taskRepository.findById(id).orElse(null);
+        if (task == null) {
+            System.out.println("==== Task not found ====");
+            return null;
+        } else {
+            if(task.isDone()){
+                task.setDone(false);
+            } else {
+                task.setDone(true);
+            }
+            return TaskResponse.fromEntity(taskRepository.save(task));
+        }
     }
-
 }

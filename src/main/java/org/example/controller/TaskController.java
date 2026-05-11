@@ -85,12 +85,12 @@ public class TaskController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<TaskResponse> updateStatus(@PathVariable("id") Long id, @RequestBody TaskStatusRequest request) {
+    public ResponseEntity<TaskResponse> taskIsDone(@PathVariable("id") Long id){
         TaskResponse task = taskService.findById(id);
         if (task == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(taskService.updateStatus(id, request));
+            return ResponseEntity.ok(taskService.taskIsDone(id));
         }
     }
 }
