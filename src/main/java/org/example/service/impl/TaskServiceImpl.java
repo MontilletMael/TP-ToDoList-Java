@@ -5,6 +5,7 @@ import org.example.dto.TaskResponse;
 import org.example.dto.TaskStatusRequest;
 import org.example.dto.TaskUpdate;
 import org.example.entity.Task;
+import org.example.exception.TaskNotFoundException;
 import org.example.repository.TaskRepository;
 import org.example.service.TaskService;
 import org.springframework.data.domain.Page;
@@ -94,18 +95,16 @@ public class TaskServiceImpl implements TaskService {
         // 3. modifier les champs utiles
         // 4. sauvegarder
         // 5. renvoyer un ItemResponse
-        Task task = taskRepository.findById(id).orElse(null);
-        if (task == null) {
-            System.out.println("==== Task not found ====");
-            return null;
-        } else {
-            task.setTitle(request.getTitle());
-            task.setDescription(request.getDescription());
-            task.setDone(request.isDone());
-            task.setPriority(request.getPriority());
+        Task task = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException(id));
 
-            return TaskResponse.fromEntity(taskRepository.save(task));
-        }
+        task.setTitle(request.getTitle());
+        task.setDescription(request.getDescription());
+        task.setDone(request.isDone());
+        task.setPriority(request.getPriority());
+
+        Task savedTask = taskRepository.save(task);
+
+        return TaskResponse.fromEntity(savedTask);
 
     }
 
@@ -116,20 +115,18 @@ public class TaskServiceImpl implements TaskService {
         // 2. le supprimer
         // 3. reflechir au comportement si l'id n'existe pas
 
-        Task task = taskRepository.findById(id).orElse(null);
-        if (task == null) {
-            System.out.println("==== Task not found ====");
-        } else {
-            taskRepository.delete(task);
-        }
+        Task task = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException(id));
+        taskRepository.delete(task);
     }
 
     @Override
     public TaskResponse updateStatus(Long id, TaskStatusRequest request) {
-        Task task = taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task not found"));
+        Task task = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException(id));
+
         if (request.getDone() != null) {
             task.setDone(request.getDone());
         }
+
         Task savedTask = taskRepository.save(task);
 
         return TaskResponse.fromEntity(savedTask);
